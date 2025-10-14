@@ -3,9 +3,16 @@ import cv2
 from picamera2 import Picamera2
 import time
 
-# fastapi endpoints
+# fastapi URL config
 base_url = "http://100.95.80.63:8080"
 endpoints = ["/","/receive_img"]
+URLparams =  [
+    {"OCR_backend": "paddle"},
+    {"OCR_backend": "easy"}
+]
+
+# load OCR frameworks
+rq.get(base_url + endpoints[0])
 
 # initialize Picamera
 cam = Picamera2()
@@ -35,7 +42,7 @@ while True:
             print(f"letter image file could not be opened: {e}")  # exit program if letter image not saved
             break
        
-        location = rq.post(base_url + endpoints[1], files=files)
+        location = rq.post(base_url + endpoints[1], files=files, params=URLparams[0])
         status = location.status_code
         if status != 200:
             print(f"[response error] status code: {status},response: {location.content}")
