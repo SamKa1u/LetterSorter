@@ -4,7 +4,7 @@ from picamera2 import Picamera2
 import time
 
 # localization
-from uszipcode import SearchEngine
+from localization import localize_response
 
 # fastapi URL config
 base_url = "http://100.95.80.63:8080"
@@ -24,17 +24,6 @@ cam.configure(config)
 cam.start()
 time.sleep(1)
 
-def get_us_region(zipcode):
-    """
-    Takes a U.S. zip code and returns the Census region.
-    """
-    search = SearchEngine()
-    zip_info = search.by_zipcode(zipcode)
-    if zip_info:
-        return {
-            "region": zip_info.major_city_state.region,
-        }
-    return None
 
 def main():
     while True:
@@ -64,10 +53,8 @@ def main():
                 print(f"[response error] status code: {status},response: {location.content}")
                 continue
             else:
-                print(location.content)
-                zipcode = location.content[-1:-5]
-                region = get_us_region(zipcode)
-                print(region)
+                b_resp = location.content
+                localize_response(b_resp)
 
         # exit program on 'esc' key pressed
         elif k == 27:
@@ -76,3 +63,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+    # location = b"lubbock texas 79401"
+    # encoded_region = localize_response(location)

@@ -33,11 +33,11 @@ def main():
         k = cv2.waitKey(1)
         if k  == ord('c'):
             # save letter image
-            cv2.imwrite("../backend/letter_image.png", frame)
+            cv2.imwrite("../Client/letter_image.png", frame)
 
             # send letter image to LetterSorter app
             try:
-                files = {'file': open('../backend/letter_image.png', 'rb')}
+                files = {'file': open('../Client/letter_image.png', 'rb')}
             except Exception as e:
                 print(f"letter image file could not be opened: {e}")  # exit program if letter image not saved
                 break
