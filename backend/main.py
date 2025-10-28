@@ -47,7 +47,7 @@ async def receive_img(OCR_backend: str, file: UploadFile = File(...) ):
         raise HTTPException(status_code=500, detail=f"Could not save to json: {e}")
 
     # read recognition result json
-    file_pattern = 'output/*.json'
+    file_pattern = '../backend/output/*.json'
     matching_files = glob.glob(file_pattern)
     try:
         with open(matching_files[-1], 'r') as file:
