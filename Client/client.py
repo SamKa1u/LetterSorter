@@ -1,13 +1,11 @@
 import requests as rq
 import cv2
-from picamera2 import Picamera2
-import time
 
 # localization
 from localization import localize_response
 
 # fastapi URL config
-base_url = "http://100.95.80.63:8080"
+base_url = "https://samka1u--ocr-fastapi-app.modal.run"
 endpoints = ["/","/receive_img"]
 URLparams =  [
     {"OCR_backend": "paddle"},
@@ -17,28 +15,25 @@ URLparams =  [
 # load OCR frameworks
 rq.get(base_url + endpoints[0])
 
-# initialize Picamera
-cam = Picamera2()
-config = cam.create_preview_configuration({'format': 'BGR888'})
-cam.configure(config)
-cam.start()
-time.sleep(1)
-
 
 def main():
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("Error: Could not open video stream.")
+        exit()
     while True:
         # preview with openCV
-        frame =  cam.capture_array()
+        ret, frame =  cap.read()
         if frame is None:
-            print('[Picam] frame skipped')
+            print('[Cam] frame skipped')
             continue
-        cv2.imshow("frame", cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        cv2.imshow("frame", frame)
 
         # capture and send image of letter if c key is pressed
         k = cv2.waitKey(1)
         if k  == ord('c'):
             # save letter image
-            cam.capture_file("letter_image.png")
+            cv2.imwrite("letter_image.png", frame)
 
             # send letter image to LetterSorter app
             try:
@@ -65,3 +60,4 @@ if __name__ == '__main__':
     main()
     # location = b"lubbock texas 79401"
     # encoded_region = localize_response(location)
+
