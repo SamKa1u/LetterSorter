@@ -17,7 +17,7 @@ rq.get(base_url + endpoints[0])
 
 
 def main():
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     if not cap.isOpened():
         print("Error: Could not open video stream.")
         exit()
@@ -50,7 +50,6 @@ def main():
             else:
                 b_resp = location.content
                 localize_response(b_resp)
-
         # exit program on 'esc' key pressed
         elif k == 27:
             break

@@ -1,12 +1,8 @@
 import regex
 import numpy as np
-import json
 
 # paddle
 from paddleocr import PaddleOCR
-
-# easy
-import easyocr
 
 def loadOCR():
     ocr = PaddleOCR(
@@ -14,14 +10,12 @@ def loadOCR():
                 use_doc_unwarping=False,
                 use_textline_orientation=False,
             )
-    reader = easyocr.Reader(['en'])  # this needs to run only once to load the model into memory
-    return ocr, reader
+    return ocr
 
-def Optical_Char_Rec(OCR_backend: str, image, ocr, reader):
+def Optical_Char_Rec(OCR_backend: str, image, ocr):
     """
     Takes an image and returns letter character recognition result based on selected OCR backend (paddleOCR | easyOCR).
-    :param reader: easyocr class
-    :param ocr: paddleocr class
+    :param ocr: instantiation of paddleocr class
     :param image: image containing characters to be recognized
     :param OCR_backend: the OCR framework the backend should use
     :returns result: letter text recognition result
@@ -34,12 +28,6 @@ def Optical_Char_Rec(OCR_backend: str, image, ocr, reader):
         )
         print("type:", type(result), "\nresult:", result)
         return result
-    # easyOCR
-    elif OCR_backend == 'easy':
-        result = reader.readtext(np_image, detail=0)
-        json_str = json.dumps(result)      # dump list into string
-        print("type:",type(json_str),"\nresult:",json_str)
-        return json_str
     else:
         return 'Backend does not contain a matching OCR framework'
 

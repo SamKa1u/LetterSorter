@@ -1,17 +1,13 @@
 # modal deployment
 import modal
 image = modal.Image.debian_slim().apt_install("libgl1-mesa-glx", "libglib2.0-dev").pip_install(
-    "fastapi[standard]",
-    "paddlepaddle",
-    "paddleocr",
-    "easyocr",
+    "fastapi[standard]",   #---------------utils
     "pillow",
     "numpy",
     "opencv-python-headless",
-    "opencv-contrib-python-headless",
-    "streamlit",
-    "uszipcode",
-    "regex"
+    "regex",
+    "paddlepaddle",                  #---------------Paddle
+    "paddleocr",
 )
 app = modal.App(image=image)
 
@@ -19,29 +15,39 @@ app = modal.App(image=image)
 @modal.concurrent(max_inputs=10)
 @modal.asgi_app()
 def fastapi_app():
+    """
+    FastAPI app cloud deployment for OCR backend
+    :return: callable for modal labs container
+    """
     from fastapi import FastAPI, File, UploadFile, HTTPException
     from src.ocr import loadOCR
     web_app = FastAPI()
-    global ocr, reader
-    ocr, reader = loadOCR()
+    global ocr
+    ocr = loadOCR()
 
     @web_app.get("/")
     def read_root():
+        """
+        Checks health of FastAPI app deployment to ensure models were properly downloaded into Modal container
+        return: message indicating API status
+        """
         import os
-        os.mkdir("/output")
+        os.mkdir("/output")                 # create ocr results output folder
 
-        if ocr is None:
-            return {"message": "Error loading paddleOCR framework"}
-        if reader is None:
-            return {"message": "Error loading paddleOCR framework"}
-        elif ocr and reader:
+        # check API health
+        if ocr:
             return {"message": "Welcome to the Modal LetterSorter API, OCR frameworks successfully loaded"}
         else:
             return {"message": "Error loading OCR frameworks"}
 
-
     @web_app.post("/receive_img")
     async def receive_img(OCR_backend: str, file: UploadFile = File(...) ):
+        """
+        FastAPI app async endpoint for receiving images and calling optical character recognition
+        :param OCR_backend: the OCR framework the backend should use
+        :param file: the uploaded image file of text to run through OCR
+        :return: response containing recognized text from image or error message
+        """
         from src.ocr import Optical_Char_Rec, get_pattern_match
         from PIL import Image
         from io import BytesIO
@@ -62,7 +68,8 @@ def fastapi_app():
 
         # process image with ocr model
         try:
-            letter_chars = Optical_Char_Rec(OCR_backend, img, ocr, reader)
+            letter_chars = Optical_Char_Rec(OCR_backend, img, ocr)
+            print(letter_chars)
         except Exception as e:
             raise HTTPException(status_code=404, detail=f"OCR failed, letter characters not found: {e}")
 
@@ -113,6 +120,4 @@ def fastapi_app():
         }
     return web_app
 
-if __name__=="__main__":
-    pass
 # modal deploy -m src.app --name=ocr
