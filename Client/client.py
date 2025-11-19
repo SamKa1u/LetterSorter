@@ -1,7 +1,6 @@
 import requests as rq
 import cv2
 import threading
-from time import sleep
 
 # localization
 from localization import localize_response
@@ -33,6 +32,8 @@ rq.get(base_url + endpoints[0])
 
 def main():
     cap = cv2.VideoCapture(0)
+#     cap.set(3, 1280)
+#     cap.set(4, 1024)
     if not cap.isOpened():
         print("Error: Could not open video stream.")
         exit()
@@ -66,8 +67,8 @@ def main():
                 shared_state["TX"] = "REGION:4"
                 continue
             else:
-                b_resp = location.content
-                region = localize_response(b_resp) # calls localization where state determined by backend is autocorrected
+                json_resp = location.json()
+                region = localize_response(json_resp) # calls localization where state determined by backend is autocorrected
                 cmd = "REGION:" + region
                 shared_state["TX"] = cmd
                     
