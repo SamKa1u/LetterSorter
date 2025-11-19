@@ -159,7 +159,7 @@ def detect_abbrev(state):
         
     return state_name
 
-def localize_response(byte_string):
+def localize_response(resp):
     """
     Calls helper functions encode_region and get_region to deduce region from raw state string.
     State is validated by autocorrect in process.
@@ -172,12 +172,25 @@ def localize_response(byte_string):
              or None if state not found
         
     """
-    # extract unvalidated state text from response 
-    resp = byte_string.decode('utf-8')
-    print("response:",resp)
-    resp_list = resp.split()
-    raw_state = resp_list[1].strip()
-    print("raw state:",raw_state)
+    # extract unvalidated state text from backend response
+    flag = resp['Just State Flag']
+    message = resp['message']
+    print("Just State:", flag)
+    print("message:", message)
+
+    if flag:
+        resp_text = message[0]
+        print("resp_text:",resp_text)
+        _ = resp_text.split()
+        print("split list",_)
+        raw_state = _[0] + " " + _[1]
+    else:
+        resp_text = message[1]
+        print("resp_text:",resp_text)      
+        _ = resp_text.split()
+        print("split list",_)
+        raw_state = _[1]
+    print("raw state", raw_state)
     
     # detect abbreviated state replace with full name
     state = detect_abbrev(raw_state)
