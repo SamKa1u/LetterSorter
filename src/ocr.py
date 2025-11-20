@@ -24,14 +24,20 @@ def Optical_Char_Rec(OCR_backend: str, image, ocr):
     :param OCR_backend: the OCR framework the backend should use
     :returns result: letter text recognition result
     """
+    # print("begin")
     np_image = np.array(image)
+    # print("image")
     # paddleOCR
     if OCR_backend == 'paddle':
+        # print("paddle")
         result = ocr.predict(
             input=np_image
         )
-        print("type:", type(result), "\nresult:", result)
-        return result
+        try:
+            print("type:", type(result), "\nresult:", result)
+            return result
+        except IndexError as e:
+            return f"{e}: transcription failed"
     else:
         return 'Backend does not contain a matching OCR framework'
 
@@ -43,22 +49,14 @@ def get_pattern_match(pattern, txt):
     :returns matches: (list) pattern recognition result.
     """
     matches = regex.findall(pattern, txt)
+    # print("matches:",matches)
     if matches:
-        try:
-            return matches[0]  # single word state name no comma
-        except IndexError:
-            try:
-                return matches[3] # single word state name with comma
-            except IndexError:
-                try:
-                    return matches[1] # 2 word state name with comma
-                except IndexError:
-                    return matches[2]  # 2 word state name no comma
+        return matches
     else:
         return None
 
 if __name__ == "__main__":
-    text = "something New Jersey 79401"
-    match = get_pattern_match("([A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9])|([A-z]*, [A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9])|([A-z]* [A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9])|([A-z]*, [A-z]* [0-9][0-9][0-9][0-9][0-9])", text)   # update to take care of commas inbetween city and state   # brittle og : [A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9]
+    text = "W A. Brahm Linkon 1863 Bloadway W, Blvd Boulder Colorado 64925 27 DBF-1P1 "
+    match = get_pattern_match("(New [A-z]* [0-9][0-9][0-9][0-9][0-9]|South [A-z]* [0-9][0-9][0-9][0-9][0-9]|West [A-z]* [0-9][0-9][0-9][0-9][0-9]|North [A-z]* [0-9][0-9][0-9][0-9][0-9]|Rhode [A-z]* [0-9][0-9][0-9][0-9][0-9])|([A-z]*, [A-z]* [0-9][0-9][0-9][0-9][0-9]|[A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9])", text)   # update to take care of commas inbetween city and state   # brittle og : [A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9]
     print(match)                                                                                                            # commas : [A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9]|[A-z]*, [A-z]* [0-9][0-9][0-9][0-9][0-9]
                                                                                                                             # 2 word states & commas: ([A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9])|([A-z]*, [A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9])|([A-z]* [A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9])|([A-z]*, [A-z]* [0-9][0-9][0-9][0-9][0-9])

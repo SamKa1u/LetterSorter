@@ -94,29 +94,42 @@ def fastapi_app():
             raise HTTPException(status_code=404, detail=f"letter text json not found:{e}")
 
         # parse recognized texts for city state zip
-        try:
-            if OCR_backend == "paddle":
-                rec_texts = data["rec_texts"]
-            else:
-                rec_texts = data
+        if OCR_backend == "paddle":
+            rec_texts = data["rec_texts"]
+        else:
+            rec_texts = data
 
-            # concatenate list of recognized text strings into one string
-            seperator = " "
-            rec_text_string = seperator.join(rec_texts)
-            print(rec_text_string)
-            city_state_zip = None
+        # concatenate list of recognized text strings into one string
+        seperator = " "
+        rec_text_string = seperator.join(rec_texts)
+        print(rec_text_string)
 
-            _ = get_pattern_match("[A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9]", rec_text_string)
-            if _ != city_state_zip:  # if pattern is matched assign match to city_state_zip
-                city_state_zip = _
+        # get matches for city state zip or state zip
+        just_state = False
+        response = None
+        res_index = None
+        matches = get_pattern_match("(New [A-z]* [0-9][0-9][0-9][0-9][0-9]|South [A-z]* [0-9][0-9][0-9][0-9][0-9]|West [A-z]* [0-9][0-9][0-9][0-9][0-9]|North [A-z]* [0-9][0-9][0-9][0-9][0-9]|Rhode [A-z]* [0-9][0-9][0-9][0-9][0-9])|([A-z]*, [A-z]* [0-9][0-9][0-9][0-9][0-9]|[A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9])", rec_text_string)
 
-            if city_state_zip is None:
-                raise HTTPException(status_code=404, detail=f"city state zip pattern not found in rec_texts list") # if no break -> pattern was not in rec texts list
-        except Exception as e:
-            raise HTTPException(status_code=404, detail=f"city state zip pattern not found: {e}")
+        if matches:
+            i = 0
+            for match in matches:  # First Non-Empty String in list
+                if match:
+                    response = match
+                res_index = i
+                i += 1
+            response = response[res_index]
+            print("response:", response)
+            print("res_index:", res_index)
+
+            if res_index == 0:                  # set just_state flag if only state name is contained in message
+                just_state = True
+            print("Just State:", just_state)
+        else:
+            raise HTTPException(status_code=404, detail=f"list of matches is empty")
 
         return {
-            "message": city_state_zip,
+            "message": response,
+            "Just State Flag": just_state,
         }
     return web_app
 
