@@ -176,33 +176,32 @@ def localize_response(resp):
     flag = resp['Just State Flag']
     message = resp['message']
     print("Just State:", flag)
-    print("message:", message)
-
-    if flag:
-        resp_text = message[0]
-        print("resp_text:",resp_text)
-        _ = resp_text.split()
-        print("split list",_)
-        raw_state = _[0] + " " + _[1]
+    
+    if message:
+        print("message:", message)
+        # extract state based on its location in message response
+        if flag:
+            _ = message.split()
+            print("split list:",_)
+            raw_state = _[0] + " " + _[1]
+        else:     
+            _ = message.split()
+            print("split list:",_)
+            raw_state = _[1]
+        
+        # detect abbreviated state replace with full name
+        print("raw state", raw_state)
+        state = detect_abbrev(raw_state)
+        
+        # autocorrect state text 
+        valid_state = corrected_state(state)        
+        print("autocorrected state:",valid_state)
+        
+        # determine region and encode
+        region = get_region(valid_state)
+        print("region:",region)
+        encoded_reg = encode_region(region)
+        print("encoded region:",encoded_reg)
+        return encoded_reg
     else:
-        resp_text = message[1]
-        print("resp_text:",resp_text)      
-        _ = resp_text.split()
-        print("split list",_)
-        raw_state = _[1]
-    print("raw state", raw_state)
-    
-    # detect abbreviated state replace with full name
-    state = detect_abbrev(raw_state)
-    
-    # autocorrect state text 
-    valid_state = corrected_state(state)        
-    print("autocorrected state:",valid_state)
-    
-    # determine region and encode
-    region = get_region(valid_state)
-    print("region:",region)
-    encoded_reg = encode_region(region)
-    print("encoded region:",encoded_reg)
-    
-    return encoded_reg
+        return None
