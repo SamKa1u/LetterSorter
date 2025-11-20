@@ -111,17 +111,19 @@ def fastapi_app():
         matches = get_pattern_match("(New [A-z]* [0-9][0-9][0-9][0-9][0-9]|South [A-z]* [0-9][0-9][0-9][0-9][0-9]|West [A-z]* [0-9][0-9][0-9][0-9][0-9]|North [A-z]* [0-9][0-9][0-9][0-9][0-9]|Rhode [A-z]* [0-9][0-9][0-9][0-9][0-9])|([A-z]*, [A-z]* [0-9][0-9][0-9][0-9][0-9]|[A-z]* [A-z]* [0-9][0-9][0-9][0-9][0-9])", rec_text_string)
 
         if matches:
+            matches = matches[0]
+            print(matches)
             i = 0
             for match in matches:  # First Non-Empty String in list
+                print(f"match_{i}:", match)
                 if match:
                     response = match
-                res_index = i
+                    break
                 i += 1
-            response = response[res_index]
             print("response:", response)
-            print("res_index:", res_index)
+            print("res_index:", i)
 
-            if res_index == 0:                  # set just_state flag if only state name is contained in message
+            if i == 0:
                 just_state = True
             print("Just State:", just_state)
         else:
