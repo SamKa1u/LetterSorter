@@ -14,7 +14,7 @@ class Coms:
                     print("[Coms] Received on RX:", received_line)              # print received line of data
             
                 if b'IR_DETECTED' in received_line:
-                    sleep(1)
+                    sleep(1.5)
                 self.shared["RX"] = received_line;
                 
                 if self.shared.get("TX") != None:
