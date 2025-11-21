@@ -150,10 +150,10 @@ def detect_abbrev(state):
     }
     # determine if state name is an abbreviation
     name_length = len(state)
-    print("name length:",name_length)
+    print("[localization] name length:",name_length)
     if name_length < 3:
         state_name = state_abbrev.get(state) # get full state name
-        print("abbreviation detected")
+        print("[localization] abbreviation detected")
     else:
         state_name = state
         
@@ -175,33 +175,39 @@ def localize_response(resp):
     # extract unvalidated state text from backend response
     flag = resp['Just State Flag']
     message = resp['message']
-    print("Just State:", flag)
+    print("[localization] Just State:", flag)
     
     if message:
-        print("message:", message)
-        # extract state based on its location in message response
-        if flag:
-            _ = message.split()
-            print("split list:",_)
-            raw_state = _[0] + " " + _[1]
-        else:     
-            _ = message.split()
-            print("split list:",_)
-            raw_state = _[1]
+        print("[localization] message:", message)
+        # extract state based on its location in message response\
+        try:
+            raw_state = False
+            if flag:
+                _ = message.split()
+                print("[localization] split list:",_)
+                raw_state = _[0] + " " + _[1]
+            else:     
+                _ = message.split()
+                print("[localization] split list:",_)
+                raw_state = _[1]
+        except Exception as e:
+            print(f"[localization] Message parsing error: {e}")
+            return None
         
         # detect abbreviated state replace with full name
-        print("raw state", raw_state)
+        print("[localization] raw state", raw_state)
         state = detect_abbrev(raw_state)
         
         # autocorrect state text 
         valid_state = corrected_state(state)        
-        print("autocorrected state:",valid_state)
+        print("[localization] autocorrected state:",valid_state)
         
         # determine region and encode
         region = get_region(valid_state)
-        print("region:",region)
+        print("[localization] region:",region)
         encoded_reg = encode_region(region)
-        print("encoded region:",encoded_reg)
+        print("[localization] encoded region:",encoded_reg)
         return encoded_reg
+        
     else:
         return None
