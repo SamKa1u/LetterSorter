@@ -32,10 +32,8 @@ rq.get(base_url + endpoints[0])
 
 def main():
     cap = cv2.VideoCapture(0)
-#     cap.set(3, 1280)
-#     cap.set(4, 1024)
     if not cap.isOpened():
-        print("Error: Could not open video stream.")
+        print("[main] CV Error: Could not open video stream.")
         exit()
     while True:
         # preview with openCV
@@ -47,7 +45,6 @@ def main():
 
         # capture and send image of letter if c key is pressed
         k = cv2.waitKey(1)
-#         if k  == ord('c'):
         if b'IR_DETECTED' in shared_state.get("RX"):              # capture and send image of letter if IR detects letter is pressed
             # save letter image
             cv2.imwrite("letter_image.png", frame)
@@ -57,20 +54,20 @@ def main():
             try:
                 files = {'file': open('letter_image.png', 'rb')}
             except Exception as e:
-                print(f"letter image file could not be opened: {e}")  # exit program if letter image not saved
+                print(f"[main] letter image file could not be opened: {e}")  # exit program if letter image not saved
                 break
             
             try:
                 location = rq.post(base_url + endpoints[1], files=files, params=URLparams[0])
             except ConnectionError as e:
-                print(f"[server connection error]: {e}")
+                print(f"[main] backend POST failed: {e}")
                 try:
                     status = rq.get(base_url + endpoints[0]).status_code
-                    print("connection status:",status)
+                    print("[main] connection status:",status)
                 except Exception as e:
-                    print(f"[server connection error]: {e}")
+                    print(f"[main] backend GET failed: {e}")
             except Exception as e:
-                print(f"[server connection error]: {e}")
+                print(f"[main] backend connection error: {e}")
                 
             status = location.status_code
             if status != 200:
