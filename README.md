@@ -1,13 +1,13 @@
 #   Letter Sorter
 
-A [TTU Whitacre College of Engineering](https://www.depts.ttu.edu/coe/) ECE-3332 Microcontrollers project lab \
+A [TTU Whitacre College of Engineering](https://www.depts.ttu.edu/coe/) ECE-3332 Microcontrollers project lab
  <img src = 'Images/dbl_T.png'/>
 
 ## Description
 
 The Letter Sorter system autonomously sorts letters in 4 region boxes approximating a distributor to regional post offices.
 ### Dependencies
-
+#### OCR Model Cloud Deploymnet 
 * OpenCV
 * Fastapi
 * Pillow
@@ -15,6 +15,16 @@ The Letter Sorter system autonomously sorts letters in 4 region boxes approximat
 * Regex
 * PaddleOCR
 * paddlepaddle
+
+#### Master controller
+* Requests
+* OpenCV
+* Threading
+* Serial
+* Difflib
+
+#### Low Level Sorting Controller
+*
   
 ### Overview
 <img src = 'Images/.png' />
@@ -27,9 +37,10 @@ The Letter Sorter system autonomously sorts letters in 4 region boxes approximat
 * Waveshare UPS Battery Pack
 
   
-#### Low level controler
-* Arduino 
+#### Low Level Sorting Control
+* Arduino Uno 
 * 2 X Servos
+* IR Proximity Sensor
 
 ### Software
 
