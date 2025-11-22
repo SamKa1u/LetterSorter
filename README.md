@@ -58,7 +58,7 @@ Josiah Horn <sub>(Embedded Software and Hardware Development)</sub>
 
 ## Acknowledgments
 
-### Special thanks to Professor Everret Mcarthur
+### Special thanks to Professor Mark Haustein
 Inspiration, code snippets, etc.
 * [TTU WCOE ECE Department](https://www.depts.ttu.edu/ece/)
 
