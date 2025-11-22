@@ -1,6 +1,6 @@
 #   Letter Sorter
 
-A [TTU Whitacre College of Engineering](https://www.depts.ttu.edu/coe/) ECE-3332 Microcontrollers project lab
+A [TTU Whitacre College of Engineering](https://www.depts.ttu.edu/coe/) ECE-3332 Microcontrollers project
  <img src = 'Images/dbl_T.png'/>
 
 ## Description
