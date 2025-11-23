@@ -5,7 +5,7 @@ A [TTU Whitacre College of Engineering](https://www.depts.ttu.edu/coe/) ECE-3332
 
 ## Description
 
-The Letter Sorter system autonomously sorts letters in 4 region boxes approximating a distributor to regional post offices.
+The Letter Sorter system autonomously sorts letters in 4 region boxes approximating a distributor for regional post offices.
 ### Dependencies
 #### OCR Model Cloud Deploymnet 
 * OpenCV
@@ -32,7 +32,7 @@ The Letter Sorter system autonomously sorts letters in 4 region boxes approximat
 ### Hardware
 
 #### Master controller
-* Raspberry pi 5 / Jetson Nano
+* Jetson Nano
 * Wyrestorm Web cam
 * Waveshare UPS Battery Pack
 
