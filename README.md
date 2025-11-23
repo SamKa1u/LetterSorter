@@ -27,7 +27,7 @@ The Letter Sorter system autonomously sorts letters in 4 region boxes approximat
 * Servo library
   
 ### Overview
-<img src = 'Images/overview.PNG' />
+<img src = 'Images/overview.PNG'/>
 
 ### Hardware
 
