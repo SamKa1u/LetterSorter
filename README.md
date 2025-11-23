@@ -24,10 +24,10 @@ The Letter Sorter system autonomously sorts letters in 4 region boxes approximat
 * Difflib
 
 #### Low Level Sorting Controller
-*
+* Servo library
   
 ### Overview
-<img src = 'Images/.png' />
+<img src = 'Images/overview.png' />
 
 ### Hardware
 
@@ -59,7 +59,25 @@ Josiah Horn <sub>(Embedded Software and Hardware Development)</sub>
 ## Acknowledgments
 
 ### Special thanks to Professor Mark Haustein
-Inspiration, code snippets, etc.
 * [TTU WCOE ECE Department](https://www.depts.ttu.edu/ece/)
-
+### Inspiration, code snippets, etc.
+#### Nvidia Forums
+* [UART](https://forums.developer.nvidia.com/t/how-to-use-uart-on-jetson-nano-getting/183571)
+* [Jetson/Arduino Communication](https://forums.developer.nvidia.com/t/connecting-jetson-nano-to-arduino-uno/172775)
+* [UART Permission Errors](https://forums.developer.nvidia.com/t/pyserial-to-use-uart-with-wrong-permision-denied-dev-ttyths1/84206)
+#### Instructables
+* [Reading Serial Data Arduino-Jetson ](https://www.instructables.com/To-Read-Serial-Data-From-Arduino-in-Jetson-Nano-De/)
+* [Jetson ArduinoIDE Install](https://www.instructables.com/To-Install-Arduino-Software-IDE-on-Jetson-Nano-Dev/)
+#### JetsonHacks
+* [Python Upgrade](https://www.youtube.com/watch?v=LSdXakt8nZ8)
+* [JetsonHacksNano Repository](https://github.com/JetsonHacksNano/build_python)
+#### Pyserial
+* [Docs](https://pyserial.readthedocs.io/en/latest/shortintro.html#testing-ports)
+#### Arduino
+* [UART Example](https://docs.arduino.cc/learn/communication/uart/#rxtx-pin-examples)
+* [Software Serial](https://forum.arduino.cc/t/softwareserial-on-arduino-uno/233437/6)
+#### Python 
+* [Difflib Docs](https://docs.python.org/3/library/difflib.html)
+#### FAA
+* [Abbreviations](https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/appendix_a.html)
   
